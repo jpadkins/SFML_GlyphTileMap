@@ -1,3 +1,10 @@
+///
+/// NOTE:
+///
+/// This Main.cpp file is mainly for testing/experimenting and may contain
+/// errors.
+///
+
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
@@ -75,6 +82,7 @@ int main()
     }
 
     GlyphTileMap tileMap(unifont, {40, 30}, {16, 16}, 16);
+    tileMap.setPosition(100, 200);
     randomizeTiles(tileMap);
 
     sf::Clock timer;
