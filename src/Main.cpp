@@ -43,7 +43,7 @@ void randomizeTiles(GlyphTileMap& tileMap)
 
         tileMap.setTile({i, j}, GlyphTileMap::Tile(
                 static_cast<wchar_t>(std::rand()%65536),
-                GlyphTileMap::Tile::Type::Center,
+                GlyphTileMap::Tile::Center,
                 randColor(),
                 randColor()
                 ));

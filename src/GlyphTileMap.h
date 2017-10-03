@@ -34,7 +34,7 @@ public:
         /// Center: The Tile's character is centered both horizontally and
         ///         vertically
         ///////////////////////////////////////////////////////////////////////
-        enum class Type { Text, Exact, Floor, Center };
+        enum Type { Text, Exact, Floor, Center };
 
         ///////////////////////////////////////////////////////////////////////
         /// \brief Default Tile constructor
@@ -121,8 +121,7 @@ public:
     ///                     (default {0, 0})
     ///////////////////////////////////////////////////////////////////////////
     void setTileCharacter(const sf::Vector2u& coords, wchar_t character,
-        Tile::Type type = Tile::Type::Center,
-        const sf::Vector2i& offset = {0, 0});
+        Tile::Type type = Tile::Center, const sf::Vector2i& offset = {0, 0});
 
     ///////////////////////////////////////////////////////////////////////////
     /// \brief Updates the foreground color at a coords in the GlyphTileMap

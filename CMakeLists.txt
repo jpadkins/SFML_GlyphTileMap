@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 project(sfmlproject)
 
 # Set compiler flags
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic -O2 -g \
     -isystem ${CMAKE_SOURCE_DIR}/lib")

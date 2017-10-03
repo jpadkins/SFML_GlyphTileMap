@@ -114,23 +114,23 @@ void GlyphTileMap::updateTile(const sf::Vector2u& coords, const Tile& tile)
     sf::Vector2i adjustedOffset = {0, 0};
 
     switch (tile.type) {
-    case Tile::Type::Text:
+    case Tile::Text:
         {
         adjustedOffset.x = glyph.bounds.left;
         adjustedOffset.y = m_spacing.y + glyph.bounds.top;
         }
         break;
-    case Tile::Type::Exact:
+    case Tile::Exact:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         adjustedOffset.x += tile.offset.x;
         adjustedOffset.y += tile.offset.y;
         break;
-    case Tile::Type::Floor:
+    case Tile::Floor:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = m_spacing.y - glyph.textureRect.height;
         break;
-    case Tile::Type::Center:
+    case Tile::Center:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         break;
@@ -152,23 +152,23 @@ void GlyphTileMap::updateCharacter(const sf::Vector2u& coords,
     sf::Vector2i adjustedOffset = {0, 0};
 
     switch (type) {
-    case Tile::Type::Text:
+    case Tile::Text:
         {
         adjustedOffset.x = glyph.bounds.left;
         adjustedOffset.y = m_spacing.y + glyph.bounds.top;
         }
         break;
-    case Tile::Type::Exact:
+    case Tile::Exact:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         adjustedOffset.x += offset.x;
         adjustedOffset.y += offset.y;
         break;
-    case Tile::Type::Floor:
+    case Tile::Floor:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = m_spacing.y - glyph.textureRect.height;
         break;
-    case Tile::Type::Center:
+    case Tile::Center:
         adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
         adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         break;

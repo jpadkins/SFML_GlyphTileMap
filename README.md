@@ -37,18 +37,17 @@ GlyphTileMap tileMap(font, {40, 30}, {16, 16}, 16);
 /// Create a GlyphTileMap::Tile, a struct containing all the data required to
 /// populate a tile of a GlyphTileMap.
 ///
-/// L'╬'                                wchar_t of the character to display
-/// GlyphTileMap::Tile::Type::Exact     Spacing of the character within the
-///                                     tile, either Text, Exact, Floor, or
-///                                     Center
-/// sf::Color::White                    Color of the tile's character
-/// sf::Color::Black                    Color of the tile's background
-/// {3, -4}                             Optional exact spacing of the tile's
-///                                     character (relative to the center)
+/// L'╬'                        wchar_t of the character to display
+/// GlyphTileMap::Tile::Exact   Spacing of the character within the tile,
+///                             either Text, Exact, Floor, or Center
+/// sf::Color::White            Color of the tile's character
+/// sf::Color::Black            Color of the tile's background
+/// {3, -4}                     Optional exact spacing of the tile's character
+///                             (relative to the center)
 ///////////////////////////////////////////////////////////////////////////////
 GlyphTileMap::Tile tile(
     L'╬',
-    GlyphTileMap::Tile::Type::Exact,
+    GlyphTileMap::Tile::Exact,
     sf::Color::White,
     sf::Color::Black,
     {3, -4}
@@ -63,7 +62,7 @@ tileMap.setTile({0, 0}, tile);
 /// Tiles on the GlyphTileMap can be updated without a GlyphTileMap::Tile
 ///////////////////////////////////////////////////////////////////////////////
 tileMap.setBackground({0, 1}, sf::Color::Blue);
-tileMap.setCharacter({1, 0}, L'!', GlyphTileMap::Tile::Type::Center);
+tileMap.setCharacter({1, 0}, L'!', GlyphTileMap::Tile::Floor);
 
 ...
 
