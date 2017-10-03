@@ -82,7 +82,6 @@ int main()
     }
 
     GlyphTileMap tileMap(unifont, {40, 30}, {16, 16}, 16);
-    tileMap.setPosition(100, 200);
     randomizeTiles(tileMap);
 
     sf::Clock timer;
@@ -115,10 +114,10 @@ int main()
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
-            sf::Color color = randColor();
+            //sf::Color color = randColor();
             for (sf::Uint32 i = 0; i < tileMap.getArea().x; ++i)
             for (sf::Uint32 j = 0; j < tileMap.getArea().y; ++j) {
-                tileMap.setTileBackground({i, j}, color);
+                tileMap.setTileCharacter({i, j}, L'?');
             }
         }
 

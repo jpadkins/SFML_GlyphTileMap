@@ -14,13 +14,6 @@
 #include "GlyphTileMap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Static variables
-///////////////////////////////////////////////////////////////////////////////
-
-std::unordered_map<sf::Uint32, std::unordered_map<wchar_t, sf::Glyph>>
-    GlyphTileMap::m_glyphs;
-
-///////////////////////////////////////////////////////////////////////////////
 GlyphTileMap::Tile::Tile()
     : type(Type::Center)
     , character(L'?')
@@ -49,14 +42,7 @@ GlyphTileMap::GlyphTileMap(sf::Font& font, const sf::Vector2u& area,
     , m_characterSize(characterSize)
     , m_foreground(sf::Quads, area.x * area.y * 4)
     , m_background(sf::Quads, area.x * area.y * 4)
-{
-    if (m_glyphs.find(characterSize) == m_glyphs.end()) {
-        m_glyphs.insert({
-            characterSize,
-            std::unordered_map<wchar_t, sf::Glyph>()
-            });
-    }
-}
+{}
 
 ///////////////////////////////////////////////////////////////////////////////
 const sf::Vector2u& GlyphTileMap::getArea() const
@@ -93,14 +79,14 @@ void GlyphTileMap::setTileCharacter(const sf::Vector2u& coords,
 void GlyphTileMap::setTileForeground(const sf::Vector2u& coords,
     const sf::Color& color)
 {
-    setForegroundColor(coords, color);
+    updateForegroundColor(coords, color);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void GlyphTileMap::setTileBackground(const sf::Vector2u& coords,
     const sf::Color& color)
 {
-    setBackgroundColor(coords, color);
+    updateBackgroundColor(coords, color);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,98 +106,79 @@ sf::Uint32 GlyphTileMap::getIndex(const sf::Vector2u& coords) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void GlyphTileMap::checkCharacter(wchar_t character)
-{
-    if (m_glyphs[m_characterSize].find(character)
-        == m_glyphs[m_characterSize].end()) {
-        m_glyphs[m_characterSize].insert({
-            character,
-            m_font.getGlyph(character, m_characterSize, false)
-            });
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 void GlyphTileMap::updateTile(const sf::Vector2u& coords, const Tile& tile)
 {
-    checkCharacter(tile.character);
-
-    sf::IntRect textureRect = m_glyphs[m_characterSize][tile.character]
-        .textureRect;
+    const sf::Glyph& glyph = m_font.getGlyph(tile.character, m_characterSize,
+        false);
 
     sf::Vector2i adjustedOffset = {0, 0};
 
     switch (tile.type) {
     case Tile::Type::Text:
         {
-        sf::FloatRect bounds = m_glyphs[m_characterSize][tile.character]
-            .bounds;
-        adjustedOffset.x = bounds.left;
-        adjustedOffset.y = m_spacing.y + bounds.top;
+        adjustedOffset.x = glyph.bounds.left;
+        adjustedOffset.y = m_spacing.y + glyph.bounds.top;
         }
         break;
     case Tile::Type::Exact:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = (m_spacing.y - textureRect.height) / 2;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         adjustedOffset.x += tile.offset.x;
         adjustedOffset.y += tile.offset.y;
         break;
     case Tile::Type::Floor:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = m_spacing.y - textureRect.height;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = m_spacing.y - glyph.textureRect.height;
         break;
     case Tile::Type::Center:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = (m_spacing.y - textureRect.height) / 2;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         break;
     }
 
-    setForegroundPosition(coords, textureRect, adjustedOffset);
-    setForegroundColor(coords, tile.foreground);
-    setBackgroundPosition(coords);
-    setBackgroundColor(coords, tile.background);
+    updateForegroundPosition(coords, glyph.textureRect, adjustedOffset);
+    updateForegroundColor(coords, tile.foreground);
+    updateBackgroundPosition(coords);
+    updateBackgroundColor(coords, tile.background);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void GlyphTileMap::updateCharacter(const sf::Vector2u& coords,
         wchar_t character, Tile::Type type, const sf::Vector2i& offset)
 {
-    checkCharacter(character);
-
-    sf::IntRect textureRect = m_glyphs[m_characterSize][character]
-        .textureRect;
+    const sf::Glyph& glyph = m_font.getGlyph(character, m_characterSize,
+        false);
 
     sf::Vector2i adjustedOffset = {0, 0};
 
     switch (type) {
     case Tile::Type::Text:
         {
-        sf::FloatRect bounds = m_glyphs[m_characterSize][character].bounds;
-        adjustedOffset.x = bounds.left;
-        adjustedOffset.y = m_spacing.y + bounds.top;
+        adjustedOffset.x = glyph.bounds.left;
+        adjustedOffset.y = m_spacing.y + glyph.bounds.top;
         }
         break;
     case Tile::Type::Exact:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = (m_spacing.y - textureRect.height) / 2;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         adjustedOffset.x += offset.x;
         adjustedOffset.y += offset.y;
         break;
     case Tile::Type::Floor:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = m_spacing.y - textureRect.height;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = m_spacing.y - glyph.textureRect.height;
         break;
     case Tile::Type::Center:
-        adjustedOffset.x = (m_spacing.x - textureRect.width) / 2;
-        adjustedOffset.y = (m_spacing.y - textureRect.height) / 2;
+        adjustedOffset.x = (m_spacing.x - glyph.textureRect.width) / 2;
+        adjustedOffset.y = (m_spacing.y - glyph.textureRect.height) / 2;
         break;
     }
 
-    setForegroundPosition(coords, textureRect, adjustedOffset);
+    updateForegroundPosition(coords, glyph.textureRect, adjustedOffset);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void GlyphTileMap::setForegroundPosition(const sf::Vector2u& coords,
+void GlyphTileMap::updateForegroundPosition(const sf::Vector2u& coords,
     const sf::IntRect& textureRect, const sf::Vector2i& offset)
 {
     sf::Uint32 index = getIndex(coords) * 4;
@@ -255,7 +222,7 @@ void GlyphTileMap::setForegroundPosition(const sf::Vector2u& coords,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void GlyphTileMap::setForegroundColor(const sf::Vector2u& coords,
+void GlyphTileMap::updateForegroundColor(const sf::Vector2u& coords,
     const sf::Color& color)
 {
     sf::Uint32 index = getIndex(coords) * 4;
@@ -267,7 +234,7 @@ void GlyphTileMap::setForegroundColor(const sf::Vector2u& coords,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void GlyphTileMap::setBackgroundPosition(const sf::Vector2u& coords)
+void GlyphTileMap::updateBackgroundPosition(const sf::Vector2u& coords)
 {
     sf::Uint32 index = getIndex(coords) * 4;
 
@@ -290,7 +257,7 @@ void GlyphTileMap::setBackgroundPosition(const sf::Vector2u& coords)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void GlyphTileMap::setBackgroundColor(const sf::Vector2u& coords,
+void GlyphTileMap::updateBackgroundColor(const sf::Vector2u& coords,
     const sf::Color& color)
 {
     sf::Uint32 index = getIndex(coords) * 4;

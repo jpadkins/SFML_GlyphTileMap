@@ -15,7 +15,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <vector>
-#include <unordered_map>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -118,10 +117,13 @@ public:
     ///
     /// \param coords       Coordinates in the GlyphTileMap to update
     /// \param character    New character for the tile
-    /// \param type         Tile::Type of the new character
+    /// \param type         Tile::Type of the new character (default Center)
+    /// \param offset       Exact spacing offset value of the new character
+    ///                     (default {0, 0})
     ///////////////////////////////////////////////////////////////////////////
     void setTileCharacter(const sf::Vector2u& coords, wchar_t character,
-        Tile::Type type, const sf::Vector2i& offset = {0, 0});
+        Tile::Type type = Tile::Type::Center,
+        const sf::Vector2i& offset = {0, 0});
 
     ///////////////////////////////////////////////////////////////////////////
     /// \brief Updates the foreground color at a coords in the GlyphTileMap
@@ -170,24 +172,24 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
-    void setForegroundPosition(const sf::Vector2u& coords,
+    void updateForegroundPosition(const sf::Vector2u& coords,
         const sf::IntRect& textureRect, const sf::Vector2i& offset);
 
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
-    void setForegroundColor(const sf::Vector2u& coords,
+    void updateForegroundColor(const sf::Vector2u& coords,
         const sf::Color& color);
 
     ///////////////////////////////////////////////////////////////////////////
     ///
     /////////////////////////////////////////////////////////////////////////// 
-    void setBackgroundPosition(const sf::Vector2u& coords);
+    void updateBackgroundPosition(const sf::Vector2u& coords);
 
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
-    void setBackgroundColor(const sf::Vector2u& coords,
+    void updateBackgroundColor(const sf::Vector2u& coords,
         const sf::Color& color);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -197,8 +199,6 @@ private:
     sf::Uint32 m_characterSize;
     sf::VertexArray m_foreground;
     sf::VertexArray m_background;
-    static std::unordered_map<sf::Uint32,
-        std::unordered_map<wchar_t, sf::Glyph>> m_glyphs;
 };
 
 #endif
