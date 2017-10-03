@@ -1,0 +1,13 @@
+bin/*
+!bin/.gitkeep
+
+build/*
+!build/.gitkeep
+
+res/fonts/*
+!res/fonts/.gitkeep
+
+*.swo
+*.swp
+.DS_Store
+.vscode/
